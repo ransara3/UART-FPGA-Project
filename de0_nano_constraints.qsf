@@ -1,0 +1,88 @@
+# ============================================================================
+# DE0-Nano Pin Assignments for UART Project
+# FPGA: Altera Cyclone IV EP4CE22F17C6
+# ============================================================================
+
+# ===== PROJECT SETTINGS =====
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE22F17C6
+set_global_assignment -name TOP_LEVEL_ENTITY uart_top
+set_global_assignment -name VERILOG_FILE uart_tx.v
+set_global_assignment -name VERILOG_FILE uart_rx.v
+set_global_assignment -name VERILOG_FILE uart_transceiver.v
+set_global_assignment -name VERILOG_FILE uart_top.v
+
+# ===== 50 MHz CLOCK =====
+set_location_assignment PIN_R8 -to CLOCK_50
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+
+# ===== PUSH BUTTONS (active-low) =====
+# KEY[0] = Reset
+set_location_assignment PIN_J15 -to KEY[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to KEY[0]
+# KEY[1] = Transmit trigger
+set_location_assignment PIN_E1 -to KEY[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to KEY[1]
+
+# ===== DIP SWITCHES (active-high) =====
+set_location_assignment PIN_M1  -to SW[0]
+set_location_assignment PIN_T8  -to SW[1]
+set_location_assignment PIN_B9  -to SW[2]
+set_location_assignment PIN_M15 -to SW[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW[3]
+
+# ===== LEDs (active-high) – display received byte =====
+set_location_assignment PIN_A15 -to LED[0]
+set_location_assignment PIN_A13 -to LED[1]
+set_location_assignment PIN_B13 -to LED[2]
+set_location_assignment PIN_A11 -to LED[3]
+set_location_assignment PIN_D1  -to LED[4]
+set_location_assignment PIN_F3  -to LED[5]
+set_location_assignment PIN_B1  -to LED[6]
+set_location_assignment PIN_L3  -to LED[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[7]
+
+# ===== GPIO_0 Header – UART signals =====
+# GPIO_0[0] = UART TX output  (Pin 1 on JP1 header)
+set_location_assignment PIN_A8 -to GPIO_0_TX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_TX
+# GPIO_0[1] = UART RX input   (Pin 2 on JP1 header)
+set_location_assignment PIN_D3 -to GPIO_0_RX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_RX
+
+# ===== GPIO_0 Header – External 7-Segment Display =====
+# Connect a common-anode 7-segment display to these GPIO pins
+# GPIO_0[2] = seg[0] = segment a
+set_location_assignment PIN_B8  -to GPIO_0_SEG[0]
+# GPIO_0[3] = seg[1] = segment b
+set_location_assignment PIN_C3  -to GPIO_0_SEG[1]
+# GPIO_0[4] = seg[2] = segment c
+set_location_assignment PIN_A2  -to GPIO_0_SEG[2]
+# GPIO_0[5] = seg[3] = segment d
+set_location_assignment PIN_A3  -to GPIO_0_SEG[3]
+# GPIO_0[6] = seg[4] = segment e
+set_location_assignment PIN_B3  -to GPIO_0_SEG[4]
+# GPIO_0[7] = seg[5] = segment f
+set_location_assignment PIN_B4  -to GPIO_0_SEG[5]
+# GPIO_0[8] = seg[6] = segment g
+set_location_assignment PIN_A4  -to GPIO_0_SEG[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_SEG[6]
+
+# ===== TIMING CONSTRAINTS =====
+set_global_assignment -name SDC_FILE uart_timing.sdc
