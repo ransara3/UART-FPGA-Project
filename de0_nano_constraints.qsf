@@ -54,7 +54,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[7]
 
 # ===== GPIO_0 Header – UART signals =====
 # GPIO_0[0] = UART TX output  (Pin 1 on JP1 header)
-set_location_assignment PIN_A8 -to GPIO_0_TX
+set_location_assignment PIN_B5 -to GPIO_0_TX
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_TX
 # GPIO_0[1] = UART RX input   (Pin 2 on JP1 header)
 set_location_assignment PIN_D3 -to GPIO_0_RX
@@ -63,7 +63,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0_RX
 # ===== GPIO_0 Header – External 7-Segment Display =====
 # Connect a common-anode 7-segment display to these GPIO pins
 # GPIO_0[2] = seg[0] = segment a
-set_location_assignment PIN_B8  -to GPIO_0_SEG[0]
+set_location_assignment PIN_A5  -to GPIO_0_SEG[0]
 # GPIO_0[3] = seg[1] = segment b
 set_location_assignment PIN_C3  -to GPIO_0_SEG[1]
 # GPIO_0[4] = seg[2] = segment c
