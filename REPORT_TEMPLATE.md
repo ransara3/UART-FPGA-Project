@@ -1,11 +1,6 @@
 ## Project Report Template
 
-### EN2111 Electronic Circuit Design - UART FPGA Implementation
-
-**Group Members:** [Add names]  
-**Submission Date:** [Add date]  
-**Board:** Altera DE0-Nano (Cyclone IV)  
-
+### EN2111 Electronic Circuit Design - UART FPGA Implementation 
 ---
 
 ## 1. RTL Design
