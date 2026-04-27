@@ -10,11 +10,14 @@
 // ============================================================================
 module uart_tb;
 
-localparam CLK_FREQ  = 50_000_000;
-localparam BAUD_RATE = 9600;
+localparam CLK_FREQ   = 50_000_000;
+localparam BAUD_RATE  = 9600;
+localparam PARITY_TYPE = 1;               // 0=None, 1=Even, 2=Odd
 localparam CLK_NS    = 1_000_000_000 / CLK_FREQ;  // 20 ns period
 localparam BIT_TIME  = 1_000_000_000 / BAUD_RATE;  // ~104167 ns per bit
-localparam FRAME_TIME = BIT_TIME * 10;              // 1 start + 8 data + 1 stop
+// Frame = 1 start + 8 data + (1 parity if enabled) + 1 stop
+localparam FRAME_BITS = (PARITY_TYPE != 0) ? 11 : 10;
+localparam FRAME_TIME = BIT_TIME * FRAME_BITS;
 
 reg clk = 0;
 reg rst_n = 0;
@@ -25,11 +28,13 @@ wire tx_serial;
 wire [7:0] rx_data;
 wire rx_valid;
 wire rx_error;
+wire parity_error;
 
 // Loopback: TX output feeds RX input
 uart_transceiver #(
     .CLK_FREQ(CLK_FREQ),
-    .BAUD_RATE(BAUD_RATE)
+    .BAUD_RATE(BAUD_RATE),
+    .PARITY_TYPE(PARITY_TYPE)
 ) dut (
     .clk(clk),
     .rst_n(rst_n),
@@ -40,7 +45,8 @@ uart_transceiver #(
     .rx(tx_serial),       // loopback
     .rx_data(rx_data),
     .rx_valid(rx_valid),
-    .rx_error(rx_error)
+    .rx_error(rx_error),
+    .parity_error(parity_error)
 );
 
 // 50 MHz clock: period = 20 ns
@@ -64,7 +70,15 @@ begin
     // Wait for transmission + reception to complete
     #(FRAME_TIME * 2);
 
-    if (rx_data === value) begin
+    if (rx_error) begin
+        $display("[FAIL] Test %0d (%0s): Framing error (bad stop bit)",
+                 test_num, label);
+        fail_cnt = fail_cnt + 1;
+    end else if (parity_error) begin
+        $display("[FAIL] Test %0d (%0s): Parity error detected",
+                 test_num, label);
+        fail_cnt = fail_cnt + 1;
+    end else if (rx_data === value) begin
         $display("[PASS] Test %0d (%0s): Sent 0x%02X, Received 0x%02X",
                  test_num, label, value, rx_data);
         pass_cnt = pass_cnt + 1;
@@ -93,8 +107,8 @@ initial begin
     #100;
 
     $display("============================================");
-    $display("  UART Testbench  |  %0d MHz  |  %0d baud",
-             CLK_FREQ / 1_000_000, BAUD_RATE);
+    $display("  UART Testbench  |  %0d MHz  |  %0d baud  |  Parity=%0d",
+             CLK_FREQ / 1_000_000, BAUD_RATE, PARITY_TYPE);
     $display("============================================");
 
     // Test 1 – ASCII 'A' (0x41) – typical printable character
